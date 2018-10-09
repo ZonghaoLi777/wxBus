@@ -1,0 +1,131 @@
+page, .bus{
+  height: 100%;
+}
+.bus .con {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 20rpx;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e5e7;
+}
+.bus .con .left {
+  flex: 1 1 auto;
+}
+.bus .con .left .line{
+  color: #363636;
+  font-size: 36rpx;
+  line-height: 36rpx;
+  font-weight: bold;
+  margin: 20rpx 0;
+  width: 100%;
+}
+.bus .con .left .text{
+  margin: 18rpx 0;
+  font-size: 28rpx;
+  line-height: 28rpx;
+  color: #919095;
+}
+.bus .con .right {
+  flex: 0 0 110rpx;
+  font-size: 28rpx;
+  padding: 50rpx 0 0;
+  margin: 20rpx 0;
+  line-height: 80rpx;
+  border-left: 1px solid #1989fa;
+  text-align: center;
+  background: url("https://lizonghao.top/static/img/switch.png") 50% 20rpx no-repeat;
+}
+.center{
+  box-sizing: border-box;
+  height: 100%;
+  padding: 171rpx 0 90rpx;
+}
+.scroll{
+  height: 100%;
+}
+.bottom {
+  font-size: 36rpx;
+  line-height: 90rpx;
+  text-align: center;
+  color: #1989fa;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+.list .line{
+  display: flex;
+  justify-content: space-between;
+  padding-left: 70rpx;
+  font-size: 34rpx;
+  color: #363636;
+  height: 118rpx;
+  line-height: 118rpx;
+  background: url("https://lizonghao.top/static/img/c-line.png") 28rpx 50% no-repeat #f5f5f5;
+}
+.list:first-of-type .line{
+  background: url("https://lizonghao.top/static/img/top-line.png") 28rpx 48rpx no-repeat #f5f5f5;
+}
+.last .line{
+  background: url("https://lizonghao.top/static/img/b-line.png") 28rpx -38rpx no-repeat #f5f5f5;
+}
+.list .line text{
+  flex: 0 0 300rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.list .line .current{
+  flex: 1 1 auto;
+  padding-left: 60rpx;
+  background: url("https://lizonghao.top/static/img/d-bus.png") 0 50% no-repeat 
+}
+.list .line .arrow {
+  flex: 0 0 80rpx;
+  transition: all 0.5s;
+  background:  url("https://lizonghao.top/static/img/arrow-bot.png") 0 50% no-repeat 
+}
+.list .line .arrow.active {
+  transform: rotateX(180deg);
+}
+.bus-detail{
+  display: flex;
+  padding-left: 30rpx;
+  background: url("https://lizonghao.top/static/img/centerline.png") 28rpx 50% no-repeat #f5f5f5;
+}
+.bus-detail>view{
+  flex: 0 0 33%;
+  text-align: center;
+  border-right: 1rpx solid #989898;
+}
+.bus-detail>view:last-of-type{
+  flex: 0 0 33%;
+  text-align: center;
+  border-right: none;
+}
+.busdevice{
+  font-size: 24rpx;
+  line-height: 50rpx;
+  color: #1989fa;
+}
+.nobus{
+  font-size: 24rpx;
+  line-height: 50rpx;
+  color: #9b9b9b;
+}
+.bus-detail text{
+  font-size: 24rpx;
+  line-height: 50rpx;
+  color: #9b9b9b;
+}
+
+/*隐藏滚动条*/
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}

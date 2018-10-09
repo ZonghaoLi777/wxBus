@@ -1,0 +1,57 @@
+.bus-title {
+  padding: 0 20rpx;
+  font-size: 32rpx;
+  line-height: 98rpx;
+  display: flex;
+  justify-content: space-between;
+  background: #faf9fe;
+  border-bottom: 1px solid #e5e5e7;
+}
+.bus-title .first {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+overflow: hidden;
+  padding-left: 90rpx;
+  background: url("https://lizonghao.top/static/img/bus-color.png") 0 50% no-repeat
+}
+.bus-title text {
+  font-size: 28rpx;
+  color: #919095;
+}
+.bus-title .naviga{
+  padding-right: 40rpx;
+  flex: 0 0 128rpx;
+  background: url("https://lizonghao.top/static/img/r-arrow.png") 100% 50% no-repeat;
+}
+.bus .con {
+  padding: 0 20rpx;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e5e7;
+}
+.bus .con .left {
+  flex: 1 1 auto;
+}
+.bus .con .left .line{
+  color: #363636;
+  font-size: 36rpx;
+  font-weight: bold;
+  margin: 20rpx 0;
+  width: 100%;
+}
+.bus .con .left .text{
+  margin: 20rpx 0;
+  font-size: 28rpx;
+  color: #919095;
+}
+.bus .con .right {
+  flex: 0 0 110rpx;
+  font-size: 30rpx;
+  padding: 40rpx 0 0;
+  margin: 40rpx 0;
+  line-height: 140rpx;
+  border-left: 1px solid #1989fa;
+  text-align: center;
+  background: url("https://lizonghao.top/static/img/switch.png") 50% 40rpx no-repeat;
+}

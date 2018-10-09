@@ -1,0 +1,21 @@
+<view class="main">
+  <view class='top'>
+    <input focus="true" bindinput="bindKeyInput" placeholder="请输入需要查询的线路" />
+  </view>
+  <view class='con' wx:for="{{searchList}}" wx:key="v" wx:for-item="v">
+    <navigator open-type="navigateTo" url="/pages/busDetail/busDetail?id={{v}}&up=true">
+      <view class='line'>{{v}}</view>
+      <view class='text'>票价1-2元</view>
+    </navigator>
+  </view>
+  <view class='ls' wx:for="{{searchLineList}}" wx:key="id" wx:for-item="v">
+    <view class='bus-title'>
+      <view class='first'>
+        {{v}}
+      </view>
+      <view class='naviga' data-lat="{{v.location.lat}}" data-lng="{{v.location.lng}}" data-name="{{v.name}}" data-dis="{{v.dis}}" data-adress="{{v.address}}" bindtap='navigateToAll'>
+        <view>全部线路</view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,32 @@
+.bus {
+  background:#e6e6e6;
+}
+.ls {
+  margin: 0 0 20rpx;
+}
+.bus-title {
+  padding: 0 20rpx;
+  font-size: 32rpx;
+  line-height: 98rpx;
+  display: flex;
+  justify-content: space-between;
+  background: #faf9fe;
+  border-bottom: 1px solid #e5e5e7;
+}
+.bus-title .first {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+overflow: hidden;
+  padding-left: 90rpx;
+  background: url("https://lizonghao.top/static/img/bus-color.png") 0 50% no-repeat
+}
+.bus-title text {
+  font-size: 28rpx;
+  color: #919095;
+}
+.bus-title .naviga{
+  padding-right: 40rpx;
+  flex: 0 0 128rpx;
+  background: url("https://lizonghao.top/static/img/r-arrow.png") 100% 50% no-repeat;
+}

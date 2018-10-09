@@ -1,0 +1,16 @@
+<!--pages/stationAll/stationAll.wxml-->
+<!-- 附近站点列表 -->
+<view class='bus'>
+  <view class='ls' wx:for="{{tableDate}}" wx:key="id" wx:for-item="v">
+    <view class='bus-title'>
+      <view class='first'>
+        {{v.name}}
+        <text>{{v.dis}}</text>
+      </view>
+      <view class='naviga' data-lat="{{v.location.lat}}" data-lng="{{v.location.lng}}" data-name="{{v.name}}" data-dis="{{v.dis}}" data-adress="{{v.address}}" bindtap='navigateToAll'>
+        <view>全部线路</view>
+      </view>
+    </view>
+  </view>
+</view>
+

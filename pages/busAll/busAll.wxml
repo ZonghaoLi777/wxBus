@@ -1,0 +1,23 @@
+<!--pages/busAll/busAll.wxml-->
+<view class="busAll">
+  <map id="myMap" show-location longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" markers="{{markers}}" bindmarkertap="markertap" polyline="{{polyline}}"  style="width: 100%; height: 600rpx;"></map>
+  <view class='bus'>
+    <view class='bus-title'>
+      <view class='first'>
+        {{tableData.name}}
+        <text>{{tableData.dis}}</text>
+      </view>
+    </view>
+    <scroll-view class='scroll' scroll-y>
+      <view class='con' wx:for="{{tableData.list}}" wx:key="id" wx:for-item="vv">
+        <navigator class='left' open-type="navigateTo" url="/pages/busDetail/busDetail?id={{vv.id}}&line={{vv.detail.LineId}}&up={{vv.status}}">
+          <view class='line'>{{vv.LINENAME}}</view>
+          <view>{{vv.FSTATION_NAME_ID}}方向</view>
+          <view class='text'>首班：{{vv.SBCSJ}}  末班：{{vv.MBCSJ}}</view>
+          <view wx:if="{{vv.haveBus && vv.differ_statione != 0}}" class='text'>{{vv.differ_statione}}站到达  下一站{{vv.NEXTSTATIONNAME}}</view>
+          <view wx:else class='text'>暂无车辆</view>
+        </navigator>
+      </view>
+    </scroll-view>
+  </view>
+</view>
