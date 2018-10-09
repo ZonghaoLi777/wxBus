@@ -12,7 +12,7 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    tableDate: []
+    tableData: []
   },
   // 跳转到搜索列表
   bindKeyInput: function (e) {
@@ -22,40 +22,19 @@ Page({
   },
   // 跳转到站点全部路线列表
   navigateToAll(e) {
-    let {name, lat, lng, dis } = { ...e.currentTarget.dataset}
+    let {name, lat, lng, dis, address } = { ...e.currentTarget.dataset}
     wx.navigateTo({
-      url: `/pages/busAll/busAll?name=${name}&lng=${lng}&lat=${lat}&dis=${dis}`
+      url: `/pages/busAll/busAll?address=${address}&name=${name}&lng=${lng}&lat=${lat}&dis=${dis}`
     })
   },
   //事件处理函数
   switch: function(e) {
-    let _this = this;
-    let { index, name, type } = { ...e.currentTarget.dataset };
-    type = type == 1 ? 2 : 1;
-    wx.request({
-      url: `${app.globalData.busUrl}/siteList?sitename=${name}&flag=${type}`,
-      success: (resp) => {
-        let list = resp.data.data.list || [];
-        if(list.length) {
-          list = list.map(v => {
-            return { ...v, sbcsj: v.SBCSJ, mbcsj: v.MBCSJ, end_statione_name: v.FSTATION_NAME_ID, linename: v.LINENAME, linetype: v.LINETYPE};
-          })
-        }
-        console.log(list);
-        let tableDate = [..._this.data.tableDate]
-        tableDate[index].list = list
-        _this.setData({
-          tableDate: [...tableDate]
-        })
-      },
-      fail () {
-        wx.showModal({
-          title: '提示',
-          content: '获取数据失败，请重试',
-          success: res => { }
-        })
-      }
-    })
+    let { k, kk } = { ...e.currentTarget.dataset };
+    let tableData = [...this.data.tableData];
+    if (tableData[k].line[kk].detail.LineName) {
+      tableData[k].line[kk].status = tableData[k].line[kk].status == 1 ? 0 : 1;
+      this.setData({ tableData: tableData});
+    }
   },
   onLoad: function () {
     // 实例化API核心类
@@ -112,59 +91,53 @@ Page({
     wx.showLoading({
       title: '数据加载中'
     })
-    wx.getLocation({
-      type: "gcj02",
-      accuracy: "false",
-      success (res) {
-        console.log(res)
-        let lat = res.latitude;
-        let lng = res.longitude;
-        let obj = utils.GPS.bd_encrypt(lat, lng);
-        console.log(obj)
-        wx.request({
-          url: `${app.globalData.busUrl}/nearLineQuery?lat=${obj.lat.toFixed(14)}&lng=${obj.lon.toFixed(14)}`,
-          success: (resp) => {
-            let data = resp.data.data.list || [];
-            let arr = Array.from(new Set(data.map(v => v.recent_statione_name)));
-            arr = arr.map((v, k) => {
-              let list = data.filter(vv => vv.recent_statione_name === v)
-              qqmapsdk.calculateDistance({
-                from: {
-                  latitude: lat,
-                  longitude: lng
-                },
-                to: [{
-                  latitude: list[0].wd,
-                  longitude: list[0].jd
-                }],
-                success: function (res) {
-                  let data = [..._this.data.tableDate];
-                  let dis = utils.formatDis(res.result.elements[0].distance);
-                  data[k].dis = dis;
-                  _this.setData({ tableDate: data });
-                },
-                complete: function (res) {
-                  console.log(res);
-                }
-              });
-              return { name: v, dis: 0, lat: list[0].wd, lng: list[0].jd,  list: list }
-            })
-            _this.setData({ tableDate: arr })
-            console.log(arr)
+    qqmapsdk.search({
+      keyword: '公交站',
+      success: function (res) {
+        let arr = utils.allLine.split(',')
+        let data = res.data.map(v => {
+          return {
+            line: v.address.split(',').filter(v => arr.indexOf(v) > -1),
+            name: v.title.slice(0, -5),
+            address: v.address,
+            location: v.location,
+            dis: utils.formatDis(v._distance) 
           }
+        }).filter(v => v.line.length).sort((a, b) => a._distance - b._distance).splice(0, 4)
+        data.forEach((v, k) => {
+          v.address = v.line.join(',');
+          v.line = v.line.map(vv => ({ name: vv, detail: {}, status: 0 }))
+          _this.setData({ tableData: data })
+          v.line.forEach((vv,kk) => {
+            wx.request({
+              url: `${app.globalData.busUrl}/detail?lineName=${vv.name}`,
+              success (res) {
+                let tableData = _this.data.tableData
+                tableData[k].line[kk].detail = {...res.data}
+                _this.setData({ tableData: tableData})
+              },
+              fail () {
+                wx.showModal({
+                  title: '提示',
+                  content: '获取具体线路信息失败，请稍后重试',
+                  success: res => { }
+                })
+              }
+            })
+          })
         })
       },
-      fail () {
+      fail: function (res) {
         wx.showModal({
-          title: '注意',
-          content: '若不打开定位将无法获得附近公交站点信息',
-          success: res => {}
+          title: '提示',
+          content: '获取数据失败，请稍后重试',
+          success: res => { }
         })
       },
       complete () {
         wx.hideLoading();
       }
-    })
+    });
   },
   getUserInfo: function(e) {
     app.globalData.userInfo = e.detail.userInfo

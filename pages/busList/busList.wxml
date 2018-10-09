@@ -9,13 +9,11 @@
     </navigator>
   </view>
   <view class='ls' wx:for="{{searchLineList}}" wx:key="id" wx:for-item="v">
-    <view class='bus-title'>
+    <view class='bus-title' data-name="{{v}}" bindtap='navigateToAll'>
       <view class='first'>
         {{v}}
       </view>
-      <view class='naviga' data-lat="{{v.location.lat}}" data-lng="{{v.location.lng}}" data-name="{{v.name}}" data-dis="{{v.dis}}" data-adress="{{v.address}}" bindtap='navigateToAll'>
-        <view>全部线路</view>
-      </view>
+      <view class='naviga'>查看更多</view>
     </view>
   </view>
 </view>

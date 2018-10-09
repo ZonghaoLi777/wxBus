@@ -5,25 +5,38 @@
     <view class="bus-search" bindtap="bindKeyInput">请输入需要查询的线路或站点</view>
   </view>
   <!-- 附近站点列表 -->
-  <view class='bus' wx:for="{{tableDate}}" wx:key="id" wx:for-item="v">
+  <view class='bus' wx:for="{{tableData}}" wx:key="id" wx:for-item="v" wx:for-index="k">
     <view class='bus-title'>
       <view class='first'>
         {{v.name}}
         <text>{{v.dis}}</text>
       </view>
-      <view class='naviga' data-dis='{{v.dis}}' data-lat="{{v.list[0].wd}}" data-lng="{{v.list[0].jd}}" data-name="{{v.name}}" bindtap='navigateToAll'>
+      <view class='naviga' data-address='{{v.address}}' data-dis='{{v.dis}}' data-lat="{{v.location.lat}}" data-lng="{{v.location.lng}}" data-name="{{v.name}}" bindtap='navigateToAll'>
         <view>全部路线</view>
       </view>
     </view>
-    <view class='con' wx:for="{{v.list}}" wx:key="name" wx:for-item="vv" wx:for-index="index">
-      <navigator class='left' open-type="navigateTo" url="/pages/busDetail/busDetail?id={{vv.id}}&line={{vv.detail.LineId}}&up={{vv.status}}">
-        <view class='line'>{{vv.linename}}</view>
-        <view>{{vv.end_statione_name}}方向</view>
-        <view class='text'>首班：{{vv.sbcsj}}  末班：{{vv.mbcsj}}</view>
-        <view wx:if="{{vv.havebus}}" class='text'>{{vv.differ_statione}}站到达</view>
-        <view wx:else class='text'>暂无车辆</view>
+    <view class='con' wx:for="{{v.line}}" wx:key="name" wx:for-item="vv" wx:for-index="kk">
+      <navigator class='left' open-type="navigateTo" url="/pages/busDetail/busDetail?id={{vv.detail.LineName}}&line={{vv.detail.LineId}}&up={{vv.status}}">
+        <view class='line'>{{vv.name}}</view>
+        <view wx:if="{{!vv.status && vv.detail.LineName}}">
+          <view>{{vv.detail.UpStation[vv.detail.UpStation.length - 1].StationName}}方向</view>
+          <view class='text'>首班：{{vv.detail.MainFirstTime}}  末班：{{vv.detail.MainLastTime}}</view>
+        </view>
+        <view wx:elif="{{vv.status && vv.detail.LineName}}">
+          <view>{{vv.detail.DownStation[vv.detail.DownStation.length - 1].StationName}}方向</view>
+          <view class='text'>首班：{{vv.detail.SubFirstTime}}  末班：{{vv.detail.SubLastTime}}</view>
+        </view>
+        <view wx:else>
+          <view>未知</view>
+          <view class='text'>首班：00:00  末班：00:00</view>
+        </view>
+        <view class='text'>票价1-2元</view>
       </navigator>
+      <view class='right' data-k="{{k}}" data-kk="{{kk}}" bindtap='switch'>换向</view>
     </view>
   </view>
-  <view class="no-data" wx:if="{{!tableDate.length}}"></view>
+  <navigator wx:if="{{tableData.length}}" class='station-more' open-type="navigateTo" url="/pages/stationAll/stationAll">
+    <view>全部站点</view>
+  </navigator>
+  <view class="no-data" wx:else></view>
 </view>

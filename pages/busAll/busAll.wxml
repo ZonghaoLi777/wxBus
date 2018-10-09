@@ -9,14 +9,24 @@
       </view>
     </view>
     <scroll-view class='scroll' scroll-y>
-      <view class='con' wx:for="{{tableData.list}}" wx:key="id" wx:for-item="vv">
-        <navigator class='left' open-type="navigateTo" url="/pages/busDetail/busDetail?id={{vv.id}}&line={{vv.detail.LineId}}&up={{vv.status}}">
-          <view class='line'>{{vv.LINENAME}}</view>
-          <view>{{vv.FSTATION_NAME_ID}}方向</view>
-          <view class='text'>首班：{{vv.SBCSJ}}  末班：{{vv.MBCSJ}}</view>
-          <view wx:if="{{vv.haveBus && vv.differ_statione != 0}}" class='text'>{{vv.differ_statione}}站到达  下一站{{vv.NEXTSTATIONNAME}}</view>
-          <view wx:else class='text'>暂无车辆</view>
+      <view class='con' wx:for="{{tableData.line}}" wx:key="name" wx:for-item="vv" wx:for-index="kk">
+        <navigator class='left' open-type="navigateTo" url="/pages/busDetail/busDetail?id={{vv.detail.LineName}}&line={{vv.detail.LineId}}&up={{vv.status}}">
+          <view class='line'>{{vv.name}}</view>
+          <view wx:if="{{!vv.status && vv.detail.LineName}}">
+            <view>{{vv.detail.UpStation[vv.detail.UpStation.length - 1].StationName}}方向</view>
+            <view class='text'>首班：{{vv.detail.MainFirstTime}}  末班：{{vv.detail.MainLastTime}}</view>
+          </view>
+          <view wx:elif="{{vv.status && vv.detail.LineName}}">
+            <view>{{vv.detail.DownStation[vv.detail.DownStation.length - 1].StationName}}方向</view>
+            <view class='text'>首班：{{vv.detail.SubFirstTime}}  末班：{{vv.detail.SubLastTime}}</view>
+          </view>
+          <view wx:else>
+            <view>未知</view>
+            <view class='text'>首班：00:00  末班：00:00</view>
+          </view>
+          <view class='text'>票价1-2元</view>
         </navigator>
+        <view class='right' data-kk="{{kk}}" bindtap='switch'>换向</view>
       </view>
     </scroll-view>
   </view>
