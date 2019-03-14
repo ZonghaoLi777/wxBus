@@ -8,35 +8,25 @@
   <view class='bus' wx:for="{{tableData}}" wx:key="id" wx:for-item="v" wx:for-index="k">
     <view class='bus-title'>
       <view class='first'>
-        {{v.name}}
-        <text>{{v.dis}}</text>
+        {{v.linename}}
       </view>
       <view class='naviga' data-address='{{v.address}}' data-dis='{{v.dis}}' data-lat="{{v.location.lat}}" data-lng="{{v.location.lng}}" data-name="{{v.name}}" bindtap='navigateToAll'>
-        <view>全部路线</view>
+        <view>查看详情</view>
       </view>
     </view>
-    <view class='con' wx:for="{{v.line}}" wx:key="name" wx:for-item="vv" wx:for-index="kk">
-      <navigator class='left' open-type="navigateTo" url="/pages/busDetail/busDetail?id={{vv.detail.LineName}}&line={{vv.detail.LineId}}&up={{vv.status}}">
-        <view class='line'>{{vv.name}}</view>
-        <view wx:if="{{!vv.status && vv.detail.LineName}}">
-          <view>{{vv.detail.UpStation[vv.detail.UpStation.length - 1].StationName}}方向</view>
-          <view class='text'>首班：{{vv.detail.MainFirstTime}}  末班：{{vv.detail.MainLastTime}}</view>
-        </view>
-        <view wx:elif="{{vv.status && vv.detail.LineName}}">
-          <view>{{vv.detail.DownStation[vv.detail.DownStation.length - 1].StationName}}方向</view>
-          <view class='text'>首班：{{vv.detail.SubFirstTime}}  末班：{{vv.detail.SubLastTime}}</view>
-        </view>
-        <view wx:else>
-          <view>未知</view>
-          <view class='text'>首班：00:00  末班：00:00</view>
-        </view>
+    <view class='con'>
+      <navigator class='left' open-type="navigateTo" url="/pages/busDetail/busDetail">
+        <view class='line'>{{v.start_statione_name}} 至 {{v.end_statione_name}}</view>
+        <view class='text'>最近车站：{{v.recent_statione_name}}</view>
+        <view class='text'>距离本站：{{v.differ_statione}}站</view>
+        <view class='text'>首班：{{v.sbcsj}}  末班：{{v.mbcsj}}</view>
         <view class='text'>票价1-2元</view>
       </navigator>
       <view class='right' data-k="{{k}}" data-kk="{{kk}}" bindtap='switch'>换向</view>
     </view>
   </view>
-  <navigator wx:if="{{tableData.length}}" class='station-more' open-type="navigateTo" url="/pages/stationAll/stationAll">
+  <!-- <navigator wx:if="{{tableData.length}}" class='station-more' open-type="navigateTo" url="/pages/stationAll/stationAll">
     <view>全部站点</view>
   </navigator>
-  <view class="no-data" wx:else></view>
+  <view class="no-data" wx:else></view> -->
 </view>

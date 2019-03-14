@@ -2,10 +2,10 @@
 //获取应用实例
 const app = getApp()
 // 引入SDK核心类
-var QQMapWX = require('../../utils/qqmap-wx-jssdk.js');
-var qqmapsdk;
+let QQMapWX = require('../../utils/qqmap-wx-jssdk.js');
+let qqmapsdk;
 // 引入工具类
-var utils = require('../../utils/util.js');
+let utils = require('../../utils/util.js');
 
 Page({
   data: {
@@ -37,6 +37,7 @@ Page({
     }
   },
   onLoad: function () {
+    let _this = this
     // 实例化API核心类
     qqmapsdk = new QQMapWX({
       key: app.globalData.mapKey
@@ -61,7 +62,6 @@ Page({
         }
       }
     })
-    let _this = this
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -91,53 +91,39 @@ Page({
     wx.showLoading({
       title: '数据加载中'
     })
-    qqmapsdk.search({
-      keyword: '公交站',
-      success: function (res) {
-        let arr = utils.allLine.split(',')
-        let data = res.data.map(v => {
-          return {
-            line: v.address.split(',').filter(v => arr.indexOf(v) > -1),
-            name: v.title.slice(0, -5),
-            address: v.address,
-            location: v.location,
-            dis: utils.formatDis(v._distance) 
-          }
-        }).filter(v => v.line.length).sort((a, b) => a._distance - b._distance).splice(0, 4)
-        data.forEach((v, k) => {
-          v.address = v.line.join(',');
-          v.line = v.line.map(vv => ({ name: vv, detail: {}, status: 0 }))
-          _this.setData({ tableData: data })
-          v.line.forEach((vv,kk) => {
-            wx.request({
-              url: `${app.globalData.busUrl}/detail?lineName=${vv.name}`,
-              success (res) {
-                let tableData = _this.data.tableData
-                tableData[k].line[kk].detail = {...res.data}
-                _this.setData({ tableData: tableData})
-              },
-              fail () {
-                wx.showModal({
-                  title: '提示',
-                  content: '获取具体线路信息失败，请稍后重试',
-                  success: res => { }
-                })
-              }
+
+    wx.getLocation({
+      type: 'gcj02',
+      success: res =>{
+        var latitude = res.latitude
+        var longitude = res.longitude
+        // latitude = utils.GPS.gcj_encrypt(latitude, longitude).lat
+        // longitude = utils.GPS.gcj_encrypt(latitude, longitude).lon
+        console.log(latitude, longitude)
+        wx.cloud.callFunction({
+          name: 'api',
+          data: {
+            lat: latitude,
+            lng: longitude,
+          },
+          success: res => {
+            console.log(res.result)
+            this.setData({ tableData: res.result })
+          },
+          fail: res => {
+            console.log(res.result)
+            wx.showModal({
+              title: '提示',
+              content: '获取数据失败，请稍后重试',
+              success: res => { }
             })
-          })
+          },
+          complete: res => {
+            wx.hideLoading();
+          }
         })
-      },
-      fail: function (res) {
-        wx.showModal({
-          title: '提示',
-          content: '获取数据失败，请稍后重试',
-          success: res => { }
-        })
-      },
-      complete () {
-        wx.hideLoading();
       }
-    });
+    })
   },
   getUserInfo: function(e) {
     app.globalData.userInfo = e.detail.userInfo
