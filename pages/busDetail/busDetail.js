@@ -52,7 +52,6 @@ Page({
    */
   onLoad: function (options) {
     const { id, line, up } = { ...options};
-    console.log(options)
     // 获得所有的业务线
     this.setData({ id: id, line: line, up: up})
     this.getLine(id, up)

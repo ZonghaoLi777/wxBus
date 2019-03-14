@@ -12,5 +12,21 @@
     "navigationBarBackgroundColor": "#4285f4",
     "navigationBarTitleText": "合肥实时公交查询",
     "navigationBarTextStyle": "#fff"
+  },
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "assests/img/home.png",
+        "selectedIconPath": "assests/img/home1.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/logs/logs",
+        "iconPath": "assests/img/route.png",
+        "selectedIconPath": "assests/img/route1.png",
+        "text": "路线"
+      }
+    ]
   }
 }

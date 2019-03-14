@@ -43,5 +43,6 @@
       </view>
     </scroll-view>
   </view>
-  <navigator class='bottom' open-type="navigateTo" url="/pages/index/index"> 返回首页 </navigator>
+  <!-- navigateTo -->
+  <navigator class='bottom' open-type="switchTab" url="/pages/index/index"> 返回首页 </navigator>
 </view>

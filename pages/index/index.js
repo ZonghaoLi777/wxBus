@@ -145,5 +145,18 @@ Page({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
+  },
+  onPullDownRefresh: function () {
+    console.log("reload");
+  },
+  onShareAppMessage: function (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    return {
+      title: '这是一个实用的小程序',
+      path: '/pages/index/index'
+    }
   }
 })
