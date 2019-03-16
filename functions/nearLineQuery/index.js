@@ -1,6 +1,6 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk');
-const request = require('request'); 
+const request = require('request');
 
 cloud.init();
 
@@ -8,12 +8,10 @@ cloud.init();
 exports.main = (event, context) => new Promise((resolve, reject) => {
   request.post({
     url: 'http://weixin.hfbus.cn/HFRTB/nearLineQuery',
-    form: { lat: event.lat, lng: event.lng}
-    // form: { lat: 31.820587, lng: 117.227239}
+    form: { lat: event.lat, lng: event.lng }
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      resolve(JSON.parse(body).data.list);
+      resolve(JSON.parse(body).data);
     }
   })
 })
-exports.main()

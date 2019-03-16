@@ -1,8 +1,10 @@
 <!--index.wxml-->
 <view class="main">
   <view class='top'>
-    <view class="title">合肥</view>
     <view class="bus-search" bindtap="bindKeyInput">请输入需要查询的线路或站点</view>
+  </view>
+  <view class="map_container">
+    <map class="map" id="map" longitude="{{longitude}}" latitude="{{latitude}}" scale="14" show-location="true" markers="{{markers}}" bindmarkertap="makertap" style="width: 100%; height: 340rpx;"></map>
   </view>
   <!-- 附近站点列表 -->
   <view class='bus' wx:for="{{tableData}}" wx:key="id" wx:for-item="v" wx:for-index="k">
@@ -20,13 +22,8 @@
         <view class='text'>最近车站：{{v.recent_statione_name}}</view>
         <view class='text'>距离本站：{{v.differ_statione}}站</view>
         <view class='text'>首班：{{v.sbcsj}}  末班：{{v.mbcsj}}</view>
-        <view class='text'>票价1-2元</view>
       </navigator>
       <view class='right' data-k="{{k}}" data-kk="{{kk}}" bindtap='switch'>换向</view>
     </view>
   </view>
-  <!-- <navigator wx:if="{{tableData.length}}" class='station-more' open-type="navigateTo" url="/pages/stationAll/stationAll">
-    <view>全部站点</view>
-  </navigator>
-  <view class="no-data" wx:else></view> -->
 </view>

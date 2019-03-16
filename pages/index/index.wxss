@@ -22,7 +22,9 @@
   margin: 20rpx 0;
   color: #919095;
 }
-
+.map_container {
+  width: 100%;
+}
 /* 主体部分 */
 .bus {
   background: #fff;
