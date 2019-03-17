@@ -3,8 +3,8 @@
     <input focus="true" bindinput="bindKeyInput" placeholder="请输入需要查询的线路" />
   </view>
   <view class='con' wx:for="{{searchList}}" wx:key="v" wx:for-item="v">
-    <navigator open-type="navigateTo" url="/pages/busDetail/busDetail?id={{v}}&up=true">
-      <view class='line'>{{v}}</view>
+    <navigator open-type="navigateTo" url="/pages/busDetail/busDetail?linename={{v.LINEORSTATIONNAME}}">
+      <view class='line'>{{v.LINEORSTATIONNAME}}</view>
       <view class='text'>票价1-2元</view>
     </navigator>
   </view>

@@ -31,7 +31,7 @@
         "pagePath": "pages/logs/logs",
         "iconPath": "assests/img/route.png",
         "selectedIconPath": "assests/img/route1.png",
-        "text": "路线"
+        "text": "地铁图"
       }
     ]
   }

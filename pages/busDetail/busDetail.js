@@ -3,57 +3,63 @@ const app = getApp()
 
 Page({
   data: {
-    id: 0,
-    line: 0,
-    up: true,
-    curLine: {},
-    list: [],
-    bus: []
+    linename: 0,
+    flag: 0,
+    list: []
   },
   switch () {
-    let up = !this.data.up
-    let list = up ? this.data.curLine.UpStation.map(v => ({ ...v, hidden: true })) : this.data.curLine.DownStation.map(v => ({ ...v, hidden: true }))
-    this.setData({ up: up, list: [...list]})
-    this.getBus(this.data.curLine.LineId, up)
+    let flag = this.data.flag ? 0 : 1
+    this.setData({ flag })
   },
-  hidden (e) {
-    const { id } = { ...e.currentTarget.dataset}
-    let list  = this.data.list.map(v => {
-      if (v.StationPointId === id) {
-        return { ...v, hidden: !v.hidden }
-      } else {
-        return v
-      }
-    })
-    this.setData({ list: list})
-  },
-  getLine (id, up) {
-    wx.request({
-      url: `${app.globalData.busUrl}/detail?lineName=${id}`,
-      success: (res) => {
-        this.setData({
-          curLine: res.data
+  siteAndResult(linename, flag) {
+    let that = this;
+    wx.cloud.callFunction({
+      name: 'siteAndResult',
+      data: {
+        linename: linename,
+        flag: flag,
+      },
+      success: res => {
+        console.log(res.result.list)
+        res.result.list = res.result.list.map(v => {
+          let stationlist = v.stationlist.map(vv => {
+            let hasBus = false
+            if (v.buslist.some(v3 => v3.stationname === vv.STATIONNAME)) {
+              hasBus = true
+            }
+            return { ...vv, hasBus }
+          })
+          return { ...v, stationlist }
         })
-        this.getBus(res.data.LineId, up)
+        that.setData({list: res.result.list})
+      },
+      fail: res => {
+        wx.showModal({
+          title: '提示',
+          content: '获取数据失败，请稍后重试',
+          success: res => { }
+        })
+      },
+      complete: res => {
+        wx.hideLoading();
       }
     })
   },
-  getBus(line, up) {
-    wx.request({
-      url: `${app.globalData.busUrl}/lineDetail?lineID=${line}&isUp=${up}`,
-      success: (res) => {
-        let list = up ? this.data.curLine.UpStation.map(v => ({ ...v, hidden: true })) : this.data.curLine.DownStation.map(v => ({ ...v, hidden: true }))
-        this.setData({list: [...list], bus: res.data})
-      }
-    })
+  onPullDownRefresh: function () {
+    wx.showLoading({ title: '数据更新中' })
+    this.siteAndResult(this.data.linename, 1)
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    const { id, line, up } = { ...options};
+    const { linename } = {...options};
     // 获得所有的业务线
-    this.setData({ id: id, line: line, up: up})
-    this.getLine(id, up)
+    this.setData({ linename: linename, flag: 0 })
+    wx.showLoading({ title: '数据加载中' })
+    this.siteAndResult(linename, 1)
+  },
+  onUnload() {
+    wx.hideLoading();
   }
 })

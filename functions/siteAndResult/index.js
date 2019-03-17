@@ -1,10 +1,11 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
+const request = require('request');
 
 cloud.init()
 
 // 云函数入口函数
-exports.main = async (event, context) => {
+exports.main = async (event, context) => new Promise((resolve, reject) => {
   request.post({
     url: 'http://weixin.hfbus.cn/HFRTB/siteAndResult',
     form: { linename: event.linename, flag: event.flag }
@@ -13,4 +14,4 @@ exports.main = async (event, context) => {
       resolve(JSON.parse(body).data);
     }
   })
-}
+})

@@ -59,11 +59,7 @@ Page({
         }
       }
     })
-
-    wx.showLoading({
-      title: '数据加载中'
-    })
-
+    wx.showLoading({title: '数据加载中'})
     const BMap = new bmap.BMapWX({
       ak: 'ohE2mpSMfPfRTk9yCGW8lC95mUuB4GS0'
     });
@@ -79,32 +75,33 @@ Page({
           latitude: wxMarkerData[0].latitude,
           longitude: wxMarkerData[0].longitude
         })
-        wx.cloud.callFunction({
-          name: 'nearLineQuery',
-          data: {
-            lat: wxMarkerData[0].latitude,
-            lng: wxMarkerData[0].longitude,
-          },
-          success: res => {
-            console.log(res.result.list)
-            this.setData({ tableData: res.result.list })
-          },
-          fail: res => {
-            wx.showModal({
-              title: '提示',
-              content: '获取数据失败，请稍后重试',
-              success: res => { }
-            })
-          },
-          complete: res => {
-            wx.hideLoading();
-          }
-        })
+        this.nearLineQuery()
       }
     });
   },
-  onPullDownRefresh: function () {
-    console.log("reload");
+  nearLineQuery () {
+    let that = this
+    wx.cloud.callFunction({
+      name: 'nearLineQuery',
+      data: {
+        lat: this.data.latitude,
+        lng: this.data.longitude,
+      },
+      success: res => {
+        that.setData({ tableData: res.result.list })
+      },
+      fail: res => {
+        wx.showModal({
+          title: '提示',
+          content: '获取数据失败，请稍后重试',
+          success: res => { }
+        })
+      },
+      complete: res => {
+        wx.hideLoading();
+        wx.stopPullDownRefresh();
+      }
+    })
   },
   onShareAppMessage: function (res) {
     if (res.from === 'button') {
@@ -115,5 +112,8 @@ Page({
       title: '这是一个实用的小程序',
       path: '/pages/index/index'
     }
+  },
+  onUnload() {
+    wx.hideLoading();
   }
 })

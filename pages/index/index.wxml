@@ -9,15 +9,13 @@
   <!-- 附近站点列表 -->
   <view class='bus' wx:for="{{tableData}}" wx:key="id" wx:for-item="v" wx:for-index="k">
     <view class='bus-title'>
-      <view class='first'>
-        {{v.linename}}
-      </view>
-      <view class='naviga' data-address='{{v.address}}' data-dis='{{v.dis}}' data-lat="{{v.location.lat}}" data-lng="{{v.location.lng}}" data-name="{{v.name}}" bindtap='navigateToAll'>
+      <view class='first'>{{v.linename}}</view>
+      <navigator class='naviga' open-type="navigateTo" url="/pages/busDetail/busDetail?linename={{v.linename}}">
         <view>查看详情</view>
-      </view>
+      </navigator>
     </view>
     <view class='con'>
-      <navigator class='left' open-type="navigateTo" url="/pages/busDetail/busDetail">
+      <navigator class='left' open-type="navigateTo" url="/pages/busDetail/busDetail?linename={{v.linename}}">
         <view class='line'>{{v.start_statione_name}} 至 {{v.end_statione_name}}</view>
         <view class='text'>最近车站：{{v.recent_statione_name}}</view>
         <view class='text'>距离本站：{{v.differ_statione}}站</view>

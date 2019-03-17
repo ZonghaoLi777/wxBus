@@ -1,43 +1,19 @@
 <view class='bus'>
   <view class='con'>
     <view class='left'>
-      <view class='line'>{{id}}</view>
-        <view wx:if="{{up}}" class='text'>
-          {{curLine.UpStation[curLine.UpStation.length - 1].StationName}}方向  
-          首：{{curLine.MainFirstTime}}  末：{{curLine.MainLastTime}}</view>
-        <view wx:else class='text'>
-          {{curLine.DownStation[curLine.DownStation.length - 1].StationName}}方向  
-          首：{{curLine.SubFirstTime}}  末：{{curLine.SubLastTime}}
-          </view>
-      <view class='text'>票价1-2元</view>
+      <view class='line'>{{linename}}</view>
+        <view class='text'>{{list[flag].SSTATION_NAME_ID}}至{{list[flag].FSTATION_NAME_ID}}</view>
+        <view class='text'>首：{{list[flag].SBCSJ}}  末：{{list[flag].MBCSJ}}</view>
     </view>
     <view class='right' bindtap='switch'>换向</view>
   </view>
   <view class='center'>
     <scroll-view class='scroll' scroll-y>
-      <view class='list' wx:for="{{list}}" wx:key="v.StationPointId" wx:for-index="k" wx:for-item="v">
-        <view class="{{k + 1 == list.length ? 'last' : 'nor'}}" bindtap='hidden' data-id='{{v.StationPointId}}'>
+      <view class='list' wx:for="{{list[flag].stationlist}}" wx:key="v.STATIONID" wx:for-index="k" wx:for-item="v">
+        <view class="{{k + 1 == list[flag].stationlist.length ? 'last' : 'nor'}}">
           <view class="line">
-            <text>{{v.StationName}}</text>
-            <view class="current" wx:if="{{bus[k].Value.length}}">到达</view>
-            <view class="{{v.hidden ? 'arrow' : 'arrow active'}}"></view>
-          </view>
-          <view wx:if='{{!v.hidden}}' class="bus-detail">
-            <view>
-              <view class="busdevice" wx:if="{{bus[k].Value[0]}}">{{bus[k].Value[0].DeviceId}}</view>
-              <view class="nobus" wx:else>暂无实时公交信息</view>
-              <text>最近一辆</text>  
-            </view>
-            <view>
-              <view class="busdevice" wx:if="{{bus[k].Value[1]}}">{{bus[k].Value[1].DeviceId}}</view>
-              <view class="nobus" wx:else>暂无实时公交信息</view>
-              <text>第二辆车</text>  
-            </view>
-            <view>
-              <view class="busdevice" wx:if="{{bus[k].Value[2]}}">{{bus[k].Value[2].DeviceId}}</view>
-              <view class="nobus" wx:else>暂无实时公交信息</view>
-              <text>第三辆车</text>  
-            </view>
+            <text>{{v.STATIONNAME}}</text>
+            <view class="current" wx:if="{{v.hasBus}}">到达</view>
           </view>
         </view>
       </view>
